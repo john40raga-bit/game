@@ -10,7 +10,19 @@ const frameWidth = 64;  // The width of a single frame on the sheet
 const frameHeight = 64; // The height of a single frame
 const totalFrames = 6;  // How many frames make up the running animation
 let currentFrame = 0;   // The frame we are currently drawing
+// Add these below your animation variables
+let charX = 150;     // Starting X position on the canvas
+let charY = 150;     // Starting Y position on the canvas
+let speed = 3;       // How many pixels to move per frame
+let isMoving = false; // Is the character currently walking?
 
+// Track which keys are currently being pressed
+const keys = {
+    ArrowUp: false,
+    ArrowDown: false,
+    ArrowLeft: false,
+    ArrowRight: false
+};
 // Variables to slow down the animation (so it doesn't run at 60fps)
 let frameCount = 0;
 const frameDelay = 5; // Update the frame every 5 game loops
