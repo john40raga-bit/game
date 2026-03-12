@@ -59,8 +59,60 @@ function animate() {
     // Call animate() again for the next frame
     requestAnimationFrame(animate);
 }
+window.addEventListener('keydown', function(e) {
+    if (keys.hasOwnProperty(e.key)) {
+        keys[e.key] = true;
+        isMoving = true;
+    }
+});
 
+window.addEventListener('keyup', function(e) {
+    if (keys.hasOwnProperty(e.key)) {
+        keys[e.key] = false;
+        
+        // Check if all movement keys are released
+        if (!keys.ArrowUp && !keys.ArrowDown && !keys.ArrowLeft && !keys.ArrowRight) {
+            isMoving = false;
+        }
+    }
+});
 // Start the loop once the image is loaded
 spriteSheet.onload = function() {
     animate();
 };
+function animate() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // 1. Update Position
+    if (keys.ArrowUp) charY -= speed;
+    if (keys.ArrowDown) charY += speed;
+    if (keys.ArrowLeft) charX -= speed;
+    if (keys.ArrowRight) charX += speed;
+
+    // 2. Handle Animation Logic
+    let sourceX = currentFrame * frameWidth;
+    let sourceY = 0; 
+
+    // Draw the character at their new charX and charY position
+    ctx.drawImage(
+        spriteSheet, 
+        sourceX, sourceY, frameWidth, frameHeight, 
+        charX, charY, frameWidth, frameHeight          
+    );
+
+    // 3. Only animate if moving
+    if (isMoving) {
+        frameCount++;
+        if (frameCount >= frameDelay) {
+            currentFrame++;
+            frameCount = 0;
+        }
+        if (currentFrame >= totalFrames) {
+            currentFrame = 0; // Loop the run cycle
+        }
+    } else {
+        currentFrame = 0; // Force to the "idle" frame when standing still
+    }
+
+    requestAnimationFrame(animate);
+}
